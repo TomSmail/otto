@@ -1,0 +1,14 @@
+.navbar {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.navbar h1 {
+    color: rgb(26, 26, 26);
+    margin: 0;
+    padding: 15px;
+    font-family: sans-serif;
+}
