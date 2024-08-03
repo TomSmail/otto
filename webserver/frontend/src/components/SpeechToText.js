@@ -1,12 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useReactMediaRecorder } from 'react-media-recorder-2';
-import axios from 'axios';
-// import AudioPlayer from './PlayAudio';
-
-const AUDIO_START_TEXT = 'Speak';
 
 // If developing locally use set LOCAL env var
-const WEBSITE_URL = 'http://127.0.0.1:5000/' + 'api/post_audio';
+const WEBSITE_URL = 'http://127.0.0.1:5000/api/post_audio';
 
 // Function packages audio blob and sends it to globally defined URL
 async function uploadAudio(blobUrl) {
@@ -39,8 +35,8 @@ async function uploadAudio(blobUrl) {
 export function AudioRecordButton() {
   const [recording, setRecording] = useState(false);
   const [mediaBlobUrl, setMediaBlobUrl] = useState('');
-  const [buttonText, setButtonText] = useState('Start Recording');
-  const [audioBlob, setAudioBlob] = useState(null);
+  const [buttonText, setButtonText] = useState('Start');
+  const [audioBlobURL, setAudioBlobURL] = useState(null);
 
   const { startRecording, stopRecording } = useReactMediaRecorder({
     audio: true,
@@ -59,17 +55,10 @@ export function AudioRecordButton() {
 
           if (response) {
             console.log('Response received from server, preparing for download.');
-            //const blob = new Blob([response], { type: 'audio/mpeg' });
             const blob = await response.blob();
             console.log(blob);
             const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'recorded_audio.mp3';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
+            setAudioBlobURL(url);
           }
         } catch (error) {
           console.error('Error uploading or downloading audio:', error);
@@ -80,12 +69,21 @@ export function AudioRecordButton() {
     }
   }, [mediaBlobUrl]);
 
+  useEffect(() => {
+    if (audioBlobURL) {
+      console.log('Playing audio');
+      const audioElement = document.createElement('audio');
+      audioElement.src = audioBlobURL;
+      audioElement.play();
+    }
+  }, [audioBlobURL]);
+
   const handleClick = () => {
     if (recording) {
       console.log('Stopping Recording');
       stopRecording();
       setRecording(false);
-      setButtonText('Start Recording');
+      setButtonText('Start');
     } else {
       console.log('Starting Recording');
       startRecording();
@@ -94,61 +92,6 @@ export function AudioRecordButton() {
     }
   };
 
-  // const handleClick = () => {
-  //   if (recording) {
-  //     // Stop
-  //     console.log('Stopping Recording');
-  //     stopRecording();
-  //     setRecording(false);
-  //     setButtonText(AUDIO_START_TEXT);
-  //   } else {
-  //     // Start
-  //     console.log('Starting Recording');
-  //     startRecording();
-  //     setRecording(true);
-  //     setButtonText('Stop');
-  //   }
-  // };
-
-  // // change button text based on recording state
-  // return (<>
-  //           <button onClick={handleClick}> {buttonText} </button>
-  //           {audioBlob && <AudioPlayer audioBlob={audioBlob} />}
-  //         </>
-  //   );
-  // }
-  // const handleClick = async () => {
-  //   if (recording) {
-  //     console.log('Stopping Recording');
-  //     setRecording(false);
-  //     setButtonText('Start Recording');
-
-  //     try {
-  //       const response = await fetch('/api/post_audio', { method: 'POST' });
-
-  //       if (response.ok) {
-  //         const blob = await response.blob();
-  //         const url = window.URL.createObjectURL(blob);
-  //         const a = document.createElement('a');
-  //         a.style.display = 'none';
-  //         a.href = url;
-  //         a.download = 'downloaded_audio.mp3';
-
-  //         document.body.appendChild(a);
-  //         a.click();
-  //         window.URL.revokeObjectURL(url);
-  //       } else {
-  //         console.error('Failed to download audio:', response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error during fetch:', error);
-  //     }
-  //   } else {
-  //     console.log('Starting Recording');
-  //     setRecording(true);
-  //     setButtonText('Stop');
-  //   }
-  // };
 
   return (
     <>
@@ -157,22 +100,4 @@ export function AudioRecordButton() {
   );
 }
 
-
-const AudioPlayer = ({ url }) => {
-  const audioRef = useRef(null);
-  console.log(url);
-
-  useEffect(() => {
-
-  }, [url]);
-
-  return (
-    <div>
-      <h1>Auto-play Audio Blob</h1>
-      <audio ref={audioRef} src={url} controls autoPlay >
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-  );
-};
 

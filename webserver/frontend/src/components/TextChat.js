@@ -1,10 +1,10 @@
 import React from  'react';
-import './index.css';
+import '../index.css';
+import LessonChat from './LessonChat';
+import { AudioRecordButton } from './SpeechToText';
 
-const TextChat = () => {
+export default function TextChat () {
     return (
-        <div className='container'>
-            <h1>Text Chat</h1>
-        </div>
+            <AudioRecordButton/>
     )
 }

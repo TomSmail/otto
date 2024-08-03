@@ -13,7 +13,10 @@ class Message:
         return f"{self.role}: {self.content}"
     
     def to_json(self) -> dict:
-        return {'role': self.role, 'content': self.content}
+        if self.role == "assistant":
+            return {'role': self.role, 'content': json.loads(self.content)}
+        else:
+            return {'role': self.role, 'content': self.content}
     
     def assistant_message_to_dict(self) -> dict:
         if self.role == "assistant":

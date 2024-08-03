@@ -26,6 +26,7 @@ class Teacher:
     
     def respond_to_student(self) -> None:
         # Query the OpenAI API to get the next response in the conversation
+        print(self.conversation.to_json())
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages= self.conversation.to_json()
@@ -42,6 +43,9 @@ class Teacher:
     def respond_to_teacher(self, response: str) -> None:
         message = Message(response, "user")
         self.conversation.add(message)
+
+    def get_conversation(self) -> 'Conversation':
+        return self.conversation
 
 
 if __name__ == '__main__':
