@@ -29,7 +29,7 @@ code {
 .flex-container {
   display: flex;
   justify-content: center;
-  width: 60%;
+  width: 90%;
   padding: 10px;
   border-radius: 10px;
   margin: 10px;
@@ -38,11 +38,16 @@ code {
 }
 
 button {
-  width: 10%;
+  width: 5%;
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
   border: none;
   background-color: rgb(213, 218, 218);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+button:hover {
+  background-color: rgb(200, 200, 200);
+  cursor: pointer;
 }

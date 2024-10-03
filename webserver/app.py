@@ -1,17 +1,19 @@
-from flask import Flask, jsonify, request, send_file, send_from_directory
+import uuid
+from flask import Flask, jsonify, request, send_file, send_from_directory, session
 from flask_cors import CORS
 import sys
 import os
 import tempfile
 
-sys.path.append('/Users/tomsmail/german-buddy/logic')
+sys.path.append('/Users/tomsmail/Documents/PersonalProjects/german-buddy/logic/')
 
 from lesson import Lesson
 
 app = Flask(__name__, static_folder='./frontend/build')
 CORS(app)
+app.secret_key = os.environ.get('SECRET_KEY')
 
-
+session_lesson_map = {}
 
 @app.route('/api/post_audio', methods=['POST', 'GET'])
 def post_audio():
@@ -48,7 +50,16 @@ def extract_transcript(request):
 
     print(temp_file_path)
 
-    lesson = Lesson()
+    lesson = None
+    if 'uid' in session:
+        lesson = Lesson()
+        session_lesson_map[session['uid']] = lesson
+        lesson = session_lesson_map[session['uid']]
+    else:
+        session['uid'] = uuid.uuid1()
+        lesson = Lesson()
+        session_lesson_map[session['uid']] = lesson
+    
 
     response, audio_path = lesson.students_speaks_teacher_responds(temp_file_path)
     return response, audio_path
