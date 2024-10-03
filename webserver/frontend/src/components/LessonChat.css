@@ -1,0 +1,46 @@
+.form-box input {
+    width: 100%;
+    padding: 0.5rem 0.8rem;
+    margin: 0.5rem;
+    border: 0;
+    border-radius: 5px;
+    font-size: 20px;
+    display: flex;
+}
+.form-box input[type="submit"] {
+    width: auto;
+    padding: 0.5rem 0.8rem;
+    background-color: antiquewhite;
+    float: right;
+}
+
+
+.form-box {
+    margin-top: 100%;
+    width: 70%;
+}
+
+.message-history {
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+}
+
+
+.ai-message, .user-message {
+    border-radius: 10px;
+    padding: 0.5rem 0.8rem;
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+}
+
+.ai-message {
+    background-color: lightgrey;
+}
+
+.user-message {
+    background-color:lightblue;
+    text-align: right;
+    float: right;
+    align-self: flex-end;
+}
